@@ -34,7 +34,7 @@ linreg <- function(formula, data){
                  VarianceOfTheRegressionCoefficients = varianceOfRegrCoefficients,
                  tValues = as.vector(tValues),
                  formula = formula,
-                 dataName = deparse(substitute(data),
+                 dataName = deparse(substitute(data)),
                  pvalues = pvalues
                  ))
   names(values$RegressionCoeficients) <- rownames(regCoef)
