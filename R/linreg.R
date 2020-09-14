@@ -9,7 +9,7 @@
 
 linreg <- function(formula, data){
   
-  stopifnot(class(formula) == "formula"  && is.data.frame(data))
+  stopifnot(inherits(formula(), "formula")  && is.data.frame(data))
   
   X <- model.matrix(formula, data)
   y <- data[all.vars(formula)[1]]
