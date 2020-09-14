@@ -25,7 +25,7 @@ linreg <- function(formula, data){
   for (i in 1:length(regCoef)) {
     tValues <- append(tValues,regCoef[i]/sqrt(varianceOfRegrCoefficients[i,i]))
   }
-  pvlues <- 2*pt(-abs(tValues),df=df)
+  pvalues <- 2*pt(-abs(tValues),df=df)
   values <- list(RegressionCoeficients = as.vector(regCoef),
                  FittedValues = fittedValues,
                  Residuals = residuals,
@@ -35,7 +35,7 @@ linreg <- function(formula, data){
                  tValues = as.vector(tValues),
                  formula = formula,
                  dataName = deparse(substitute(data)),
-                 pvalues = pvalues
+                 Pvalues = pvalues
                  )
   names(values$RegressionCoeficients) <- rownames(regCoef)
   class(values) <- "linreg"
