@@ -36,7 +36,7 @@ linreg <- function(formula, data){
                  formula = formula,
                  dataName = deparse(substitute(data)),
                  pvalues = pvalues
-                 ))
+                 )
   names(values$RegressionCoeficients) <- rownames(regCoef)
   class(values) <- "linreg"
   
