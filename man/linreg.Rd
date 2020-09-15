@@ -15,5 +15,5 @@ linreg(formula, data)
 S3 object of linreg
 }
 \description{
-The algorithm takes a graph and an initial node and calculates the shortest path from the initial node to every other node in the graph. Find Wikipedia docs \href{https://cutt.ly/SfE5Er1}{Here}.
+Class takes linear equation and data structure, calculates regression coefficients, fitted values, residuals, degrees of freedom, residual variance, variance of the regression coefficients, t-values and p-values.
 }

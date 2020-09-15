@@ -1,18 +1,21 @@
 Package: Lab04
 Type: Package
-Title: What the Package Does (Title Case)
+Title: linear regression package to solve linear regression models
 Version: 0.1.0
 Date: 2020-09-10
 Authors@R: c(person("Lukosevicius", "Martynas", email = "martynas2514@gmail.com", role = "cre"),
              person("Alejo", "Perez", email = "alejperz7@gmail.com", role = "aut"))
 Maintainer: Martynas Lukosevicius <martynas2514@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Class takes linear equation and data structure, calculates regression coefficients, fitted values, residuals, degrees of freedom, residual variance, variance of the regression coefficients, t-values and p-values.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/martynas2514/Lab04
 RoxygenNote: 7.1.1
+Imports:
+  ggplot2
 Suggests: 
     testthat,
-    ggplot2
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

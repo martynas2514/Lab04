@@ -1,0 +1,81 @@
+---
+title: "Lab04: linreg class"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{linreg}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Lab04)
+```
+
+# What is this package?
+
+This is a linear regression package to solve linear regression models
+
+## linreg class
+Class takes linear equation and data structure, calculates regression coefficients, fitted values, residuals, degrees of freedom, residual variance, variance of the regression coefficients, t-values and p-values.
+
+### Methods
+
+1. **print()**
+
+prints formula, name of data frame and regression coeficients:
+
+Example:
+```{r include = TRUE}
+print(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+```
+ 
+2. **plot()**
+
+plots residuals vs Fitted values plot and Scale - Location plot
+
+Example:
+```{r include = TRUE}
+plot(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+```
+
+3. **resid()**
+
+returns vector of residuals
+
+Example:
+```
+resid(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+```
+
+4. **pred()**
+
+returns the predicted values
+
+Example:
+```
+pred(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+```
+5. **coef()**
+
+returns coefficients as a named vector
+
+Example:
+```{r include = TRUE}
+coef(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+```
+6. **summary()**
+
+returns the summary of linear regression model
+
+Example:
+```{r include = TRUE}
+summary(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+```
+
