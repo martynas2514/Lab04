@@ -33,7 +33,8 @@ prints formula, name of data frame and regression coeficients:
 
 Example:
 ```{r include = TRUE}
-print(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+temp <- linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
+temp$print()
 ```
  
 2. **plot()**
@@ -42,7 +43,8 @@ plots residuals vs Fitted values plot and Scale - Location plot
 
 Example:
 ```{r include = TRUE}
-plot(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+temp <- linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
+temp$plot()
 ```
 
 3. **resid()**
@@ -51,7 +53,8 @@ returns vector of residuals
 
 Example:
 ```
-resid(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+temp <- linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
+temp$resid()
 ```
 
 4. **pred()**
@@ -60,7 +63,8 @@ returns the predicted values
 
 Example:
 ```
-pred(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+temp <- linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
+temp$pred()
 ```
 5. **coef()**
 
@@ -68,7 +72,8 @@ returns coefficients as a named vector
 
 Example:
 ```{r include = TRUE}
-coef(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+temp <- linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
+temp$coef()
 ```
 6. **summary()**
 
@@ -76,6 +81,7 @@ returns the summary of linear regression model
 
 Example:
 ```{r include = TRUE}
-summary(linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris))
+temp <- linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
+temp$summary()
 ```
 
