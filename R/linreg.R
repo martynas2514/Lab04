@@ -9,7 +9,7 @@
 
 linreg <- function(formula, data){
   
-  stopifnot(class(formula) == "formula"  && is.data.frame(data))
+  stopifnot(inherits(formula(), "formula")  && is.data.frame(data))
   
   X <- model.matrix(formula, data)
   y <- data[all.vars(formula)[1]]
@@ -25,7 +25,7 @@ linreg <- function(formula, data){
   for (i in 1:length(regCoef)) {
     tValues <- append(tValues,regCoef[i]/sqrt(varianceOfRegrCoefficients[i,i]))
   }
-  
+  pvalues <- 2*pt(-abs(tValues),df=df)
   values <- list(RegressionCoeficients = as.vector(regCoef),
                  FittedValues = fittedValues,
                  Residuals = residuals,
@@ -34,7 +34,9 @@ linreg <- function(formula, data){
                  VarianceOfTheRegressionCoefficients = varianceOfRegrCoefficients,
                  tValues = as.vector(tValues),
                  formula = formula,
-                 dataName = deparse(substitute(data)))
+                 dataName = deparse(substitute(data)),
+                 Pvalues = pvalues
+                 )
   names(values$RegressionCoeficients) <- rownames(regCoef)
   class(values) <- "linreg"
   
