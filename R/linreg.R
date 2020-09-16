@@ -58,9 +58,9 @@ linreg <- setRefClass("linreg",
                            }
                            Pvalues <<- 2*pt(abs(TValues),df=DegreesOfFreedom, lower=FALSE)
                          },
-                         # Print Function
+                         # Print function
                          print = function(){
-                           cat("linreg (formula = ", format(Formula), ", data =", DataName ,")", sep = "")
+                           cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")", sep = "")
                            cat("\n Coefficients: \n", names(RegressionCoeficients),"\n", RegressionCoeficients)
                          },
                          # Function that returns Fitted Values
@@ -76,15 +76,15 @@ linreg <- setRefClass("linreg",
                            return(RegressionCoeficients)
                          },
                          summary = function(){
+                           cat("Intercept ", RegressionCoeficients)
+                           #summaryMatrix <- matrix(c(RegressionCoeficients, Pvalues, TValues), ncol = 3)
+                           #rownames(summaryMatrix) <- names(RegressionCoeficients)
                            
-                           summaryMatrix <- matrix(c(RegressionCoeficients, Pvalues, TValues), ncol = 3)
-                           rownames(summaryMatrix) <- names(RegressionCoeficients)
-                           
-                           cat(summaryMatrix)
+                           #cat(summaryMatrix)
                            #rownames(summaryMatrix) <- c()
                            #cat(names(obj$RegressionCoeficients),"\n", obj$RegressionCoeficients)
                            #cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
-                           # cat("\n t - values:", obj$tValues)
+                           #cat("\n t - values:", obj$tValues)
                            #cat("\n residual variance:", ResidualVariance)
                            #cat("\n degrees of freedom:", DegreesOfFreedom,"\n")
                            
