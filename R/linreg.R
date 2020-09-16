@@ -63,12 +63,15 @@ linreg <- setRefClass("linreg",
                            cat("linreg (formula = ", format(Formula), ", data =", DataName ,")", sep = "")
                            cat("\n Coefficients: \n", names(RegressionCoeficients),"\n", RegressionCoeficients)
                          },
+                         # Function that returns Fitted Values
                          pred = function(){
                            return(FittedValues)
                          },
+                         # Function that returns Residuals
                          resid = function(){
                            return(as.vector(Residuals))
                          },
+                         # Function that returns The Regression Coefficients
                          coef = function(){
                            return(RegressionCoeficients)
                          },
@@ -76,13 +79,14 @@ linreg <- setRefClass("linreg",
                            
                            summaryMatrix <- matrix(c(RegressionCoeficients, Pvalues, TValues), ncol = 3)
                            rownames(summaryMatrix) <- names(RegressionCoeficients)
+                           
                            cat(summaryMatrix)
                            #rownames(summaryMatrix) <- c()
                            #cat(names(obj$RegressionCoeficients),"\n", obj$RegressionCoeficients)
-                           cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
+                           #cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
                            # cat("\n t - values:", obj$tValues)
-                           cat("\n residual variance:", ResidualVariance)
-                           cat("\n degrees of freedom:", DegreesOfFreedom,"\n")
+                           #cat("\n residual variance:", ResidualVariance)
+                           #cat("\n degrees of freedom:", DegreesOfFreedom,"\n")
                            
                          },
                          plot = function() {
