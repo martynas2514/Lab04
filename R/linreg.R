@@ -18,6 +18,7 @@
 
 
 linreg <- setRefClass("linreg",
+                       # Include fields -----------
                        fields = list(Formula = "formula",
                                      RegressionCoeficients = "matrix",
                                      FittedValues = "matrix",
@@ -28,26 +29,36 @@ linreg <- setRefClass("linreg",
                                      TValues = "vector",
                                      DataName = "character",
                                      Pvalues = "vector"),
+                      
+                      # Include methods
                        methods = list(
+                         # Initialization of fields 
                          initialize = function(formula, data) {
                            Formula <<- formula
-                           DataName <<- deparse(substitute(data))
+                           DataName <<- deparse(substitute(data)) #get the name of dataframe
                            X <- model.matrix(Formula, data)
                            y <- data[all.vars(Formula)[1]]
                            y <- unname(data.matrix(y))
+                           # Apply formula to get the regression coefficient matrix
                            RegressionCoeficients <<- solve(t(X) %*% X) %*% t(X) %*% y
+                           # Apply formula to get fitted values
                            FittedValues <<- X %*% RegressionCoeficients
+                           # Apply formula to get Residuals
                            Residuals <<- y - FittedValues
+                           # Apply formula to get the degrees of freedom
                            DegreesOfFreedom <<- dim(X)[1] - dim(X)[2]
+                           # Apply formula to get the degrees of freedom the Residual Variance 
                            ResidualVariance <<- (t(Residuals) %*% Residuals) / DegreesOfFreedom
+                           # Apply formula to get the degrees of freedom the Variance of the Regression coefficient 
                            VarianceOfTheRegressionCoefficients <<- as.vector(ResidualVariance) * (solve(t(X) %*% X))
-                           
+                           # TValues calculation by means of "for loop" over the Variance Of The Regression Coefficients diagonal 
                            TValues <<- vector()
                            for (i in 1:length(RegressionCoeficients)) {
                              TValues <<- append(TValues,RegressionCoeficients[i]/sqrt(VarianceOfTheRegressionCoefficients[i,i]))
                            }
-                           Pvalues <<- 2*pt(-abs(TValues),df=DegreesOfFreedom)
+                           Pvalues <<- 2*pt(abs(TValues),df=DegreesOfFreedom, lower=FALSE)
                          },
+                         # Print Function
                          print = function(){
                            cat("linreg (formula = ", format(Formula), ", data =", DataName ,")", sep = "")
                            cat("\n Coefficients: \n", names(RegressionCoeficients),"\n", RegressionCoeficients)
