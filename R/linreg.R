@@ -75,77 +75,60 @@ linreg <- setRefClass("linreg",
                            
                          },
                          plot = function() {
-                           tempDataFrame <- data.frame(unlist(Residuals), unlist(FittedValues))
-                           names(tempDataFrame) <- c("Residuals", "Fitted_Value")
+                           
+                           
+                           
+                           tempDataFrame <- data.frame(unlist( Residuals), unlist( FittedValues), c(1:length( Residuals)))
+                           names(tempDataFrame) <- c("Residuals", "Fitted_Value", "Index")
+                           
+                           outliers <- tempDataFrame$Residuals > as.numeric(quantile(tempDataFrame$Residuals)[4]) + (IQR(tempDataFrame$Residuals) * 1.82) |
+                             tempDataFrame$Residuals < as.numeric(quantile(tempDataFrame$Residuals)[2]) - (IQR(tempDataFrame$Residuals) * 1.82)
+                           
+                           
                            A <- ggplot2::ggplot(data = tempDataFrame) +
-                             ggplot2::theme(
-                               plot.title = ggplot2::element_text(
-                                 color = "black",
-                                 size = 14,
-                                 face = "bold",
-                                 hjust = 0.5
-                               ),
-                               axis.title.x = ggplot2::element_text(
-                                 color = "black",
-                                 size = 14,
-                                 face = "bold"
-                               ),
-                               axis.title.y = ggplot2::element_text(
-                                 color = "black",
-                                 size = 14,
-                                 face = "bold"
-                               ),
-                               panel.background = ggplot2::element_rect(fill = "white", colour = "black"),
-                               axis.text.x = ggplot2::element_text(size = 12, face = "bold"),
-                               axis.text.y = ggplot2::element_text(size = 12, face = "bold")
-                             ) +
+                             theme_liu()+
                              ggplot2::aes(x = Fitted_Value, y = Residuals) +
-                             ggplot2::geom_line(size = 1, colour = "red") +
+                             ggplot2::geom_hline(yintercept = 0, linetype = "dotted") +
+                             ggplot2::geom_text(ggplot2::aes(label=ifelse(outliers ,as.character(Index),'')),hjust=1.3,vjust=0) +
+                             ggplot2::geom_smooth(ggplot2::aes( x = Fitted_Value, y = Residuals),
+                                         formula = y~x,
+                                         se = FALSE,
+                                         span = 1,
+                                         color = "red",
+                                         method = "loess") +
+                             #ggplot2::geom_line(size = 1, colour = "red") +
                              ggplot2::geom_point(size = 5,
                                                  fill = NA,
                                                  shape = 1) +
                              ggplot2::ggtitle("Residuals vs Fitted") +
-                             ggplot2::xlab(paste("Fitted Values", "\n lm(", format(Formula), ")", sep = ""))
+                             ggplot2::xlab(paste("Fitted Values", "\n lm(", format( Formula), ")", sep = ""))
+                             
                            
                            
                            tempDataFrame <-
-                             data.frame(unlist(sqrt(abs(Residuals))), unlist(FittedValues))
-                           names(tempDataFrame) <- c("stdResiduals", "Fitted_Value")
+                             data.frame(unlist(sqrt(abs( Residuals))), unlist( FittedValues),c(1:length( Residuals)))
+                           names(tempDataFrame) <- c("stdResiduals", "Fitted_Value", "Index")
                            
                            B <- ggplot2::ggplot(data = tempDataFrame) +
-                             ggplot2::theme(
-                               plot.title = ggplot2::element_text(
-                                 color = "black",
-                                 size = 14,
-                                 face = "bold",
-                                 hjust = 0.5
-                               ),
-                               axis.title.x = ggplot2::element_text(
-                                 color = "black",
-                                 size = 14,
-                                 face = "bold"
-                               ),
-                               axis.title.y = ggplot2::element_text(
-                                 color = "black",
-                                 size = 14,
-                                 face = "bold"
-                               ),
-                               panel.background = ggplot2::element_rect(fill = "white", colour = "black"),
-                               axis.text.x = ggplot2::element_text(size = 12, face = "bold"),
-                               axis.text.y = ggplot2::element_text(size = 12, face = "bold")
-                             ) +
                              ggplot2::aes(x = Fitted_Value, y = stdResiduals) +
-                             ggplot2::geom_line(size = 1, colour = "red") +
+                             ggplot2::geom_text(ggplot2::aes(label=ifelse(outliers ,as.character(Index),'')),hjust=1.3,vjust=0) +
+                             #ggplot2::geom_line(size = 1, colour = "red") +
                              ggplot2::geom_point(size = 5,
                                                  fill = NA,
                                                  shape = 1) +
+                             ggplot2::geom_smooth(ggplot2::aes( x = Fitted_Value, y = stdResiduals),
+                                                  formula = y~x,
+                                                  se = FALSE,
+                                                  span = 1,
+                                                  color = "red",
+                                                  method = "loess") +
                              ggplot2::ggtitle("Scale - Location") +
-                             ggplot2::xlab(paste("Fitted Values", "\n lm(", format(Formula), ")", sep = "")) +
-                             ggplot2::ylab(expression(sqrt(abs(
-                               "Standardized residuals"
-                             ))))
+                             ggplot2::xlab(paste("Fitted Values", "\n lm(", format( Formula), ")", sep = "")) +
+                             ggplot2::ylab(expression(sqrt(abs("Standardized residuals")))) +
+                             theme_liu()
+                             
                            
-                           
+                           gridExtra::grid.arrange(A,B)
                          }
                        )
 )

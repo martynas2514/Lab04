@@ -13,7 +13,8 @@ LazyData: true
 URL: https://github.com/martynas2514/Lab04
 RoxygenNote: 7.1.1
 Imports:
-  ggplot2
+  ggplot2,
+  gridExtra
 Suggests: 
     testthat,
     knitr,

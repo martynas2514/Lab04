@@ -42,7 +42,7 @@ temp$print()
 plots residuals vs Fitted values plot and Scale - Location plot
 
 Example:
-```{r include = TRUE}
+```
 temp <- linreg(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
 temp$plot()
 ```
