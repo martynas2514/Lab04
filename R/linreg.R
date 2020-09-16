@@ -1,45 +1,151 @@
 #' Multiple regression model
-#' 
-#' @param formula formula
-#' @param data data.frame
-#' @return  S3 object of linreg
-#' @description  
-#' Class takes linear equation and data structure, calculates regression coefficients, fitted values, residuals, degrees of freedom, residual variance, variance of the regression coefficients, t-values and p-values.
-#' @export
+#'
+#' @field Formula formula. 
+#' @field RegressionCoeficients matrix. 
+#' @field FittedValues matrix. 
+#' @field Residuals matrix. 
+#' @field DegreesOfFreedom numeric. 
+#' @field ResidualVariance matrix. 
+#' @field VarianceOfTheRegressionCoefficients matrix. 
+#' @field TValues vector. 
+#' @field DataName character. 
+#' @field Pvalues vector. 
+#'
+#' @return
+#' @import methods
+#' @export linreg
+#'
 
-linreg <- function(formula, data){
-  
-  stopifnot(inherits(formula(), "formula")  && is.data.frame(data))
-  
-  X <- model.matrix(formula, data)
-  y <- data[all.vars(formula)[1]]
-  y <- unname(data.matrix(y))
-  regCoef <- solve(t(X) %*% X) %*% t(X) %*% y
-  fittedValues <- X %*% regCoef
-  residuals <- y - fittedValues
-  df <- dim(X)[1] - dim(X)[2]
-  residualVariance <- (t(residuals) %*% residuals) / df
-  varianceOfRegrCoefficients <- as.vector(residualVariance) * (solve(t(X) %*% X))
-  
-  tValues <- vector()
-  for (i in 1:length(regCoef)) {
-    tValues <- append(tValues,regCoef[i]/sqrt(varianceOfRegrCoefficients[i,i]))
-  }
-  pvalues <- 2*pt(-abs(tValues),df=df)
-  values <- list(RegressionCoeficients = as.vector(regCoef),
-                 FittedValues = fittedValues,
-                 Residuals = residuals,
-                 degreesOfFreedom = as.integer(df),
-                 ResidualVariance = as.numeric(residualVariance),
-                 VarianceOfTheRegressionCoefficients = varianceOfRegrCoefficients,
-                 tValues = as.vector(tValues),
-                 formula = formula,
-                 dataName = deparse(substitute(data)),
-                 Pvalues = pvalues
-                 )
-  names(values$RegressionCoeficients) <- rownames(regCoef)
-  class(values) <- "linreg"
-  
-  
-  return(values)
-}
+
+linreg <- setRefClass("linreg",
+                       fields = list(Formula = "formula",
+                                     RegressionCoeficients = "matrix",
+                                     FittedValues = "matrix",
+                                     Residuals = "matrix",
+                                     DegreesOfFreedom = "numeric",
+                                     ResidualVariance = "matrix",
+                                     VarianceOfTheRegressionCoefficients ="matrix",
+                                     TValues = "vector",
+                                     DataName = "character",
+                                     Pvalues = "vector"),
+                       methods = list(
+                         initialize = function(formula, data) {
+                           Formula <<- formula
+                           DataName <<- deparse(substitute(data))
+                           X <- model.matrix(Formula, data)
+                           y <- data[all.vars(Formula)[1]]
+                           y <- unname(data.matrix(y))
+                           RegressionCoeficients <<- solve(t(X) %*% X) %*% t(X) %*% y
+                           FittedValues <<- X %*% RegressionCoeficients
+                           Residuals <<- y - FittedValues
+                           DegreesOfFreedom <<- dim(X)[1] - dim(X)[2]
+                           ResidualVariance <<- (t(Residuals) %*% Residuals) / DegreesOfFreedom
+                           VarianceOfTheRegressionCoefficients <<- as.vector(ResidualVariance) * (solve(t(X) %*% X))
+                           
+                           TValues <<- vector()
+                           for (i in 1:length(RegressionCoeficients)) {
+                             TValues <<- append(TValues,RegressionCoeficients[i]/sqrt(VarianceOfTheRegressionCoefficients[i,i]))
+                           }
+                           Pvalues <<- 2*pt(-abs(TValues),df=DegreesOfFreedom)
+                         },
+                         print = function(){
+                           cat("linreg (formula = ", format(Formula), ", data =", DataName ,")", sep = "")
+                           cat("\n Coefficients: \n", names(RegressionCoeficients),"\n", RegressionCoeficients)
+                         },
+                         pred = function(){
+                           return(FittedValues)
+                         },
+                         resid = function(){
+                           return(as.vector(Residuals))
+                         },
+                         coef = function(){
+                           return(RegressionCoeficients)
+                         },
+                         summary = function(){
+                           
+                           summaryMatrix <- matrix(c(RegressionCoeficients, Pvalues, TValues), ncol = 3)
+                           rownames(summaryMatrix) <- names(RegressionCoeficients)
+                           cat(summaryMatrix)
+                           #rownames(summaryMatrix) <- c()
+                           #cat(names(obj$RegressionCoeficients),"\n", obj$RegressionCoeficients)
+                           cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
+                           # cat("\n t - values:", obj$tValues)
+                           cat("\n residual variance:", ResidualVariance)
+                           cat("\n degrees of freedom:", DegreesOfFreedom,"\n")
+                           
+                         },
+                         plot = function() {
+                           tempDataFrame <- data.frame(unlist(Residuals), unlist(FittedValues))
+                           names(tempDataFrame) <- c("Residuals", "Fitted_Value")
+                           A <- ggplot2::ggplot(data = tempDataFrame) +
+                             ggplot2::theme(
+                               plot.title = ggplot2::element_text(
+                                 color = "black",
+                                 size = 14,
+                                 face = "bold",
+                                 hjust = 0.5
+                               ),
+                               axis.title.x = ggplot2::element_text(
+                                 color = "black",
+                                 size = 14,
+                                 face = "bold"
+                               ),
+                               axis.title.y = ggplot2::element_text(
+                                 color = "black",
+                                 size = 14,
+                                 face = "bold"
+                               ),
+                               panel.background = ggplot2::element_rect(fill = "white", colour = "black"),
+                               axis.text.x = ggplot2::element_text(size = 12, face = "bold"),
+                               axis.text.y = ggplot2::element_text(size = 12, face = "bold")
+                             ) +
+                             ggplot2::aes(x = Fitted_Value, y = Residuals) +
+                             ggplot2::geom_line(size = 1, colour = "red") +
+                             ggplot2::geom_point(size = 5,
+                                                 fill = NA,
+                                                 shape = 1) +
+                             ggplot2::ggtitle("Residuals vs Fitted") +
+                             ggplot2::xlab(paste("Fitted Values", "\n lm(", format(Formula), ")", sep = ""))
+                           
+                           
+                           tempDataFrame <-
+                             data.frame(unlist(sqrt(abs(Residuals))), unlist(FittedValues))
+                           names(tempDataFrame) <- c("stdResiduals", "Fitted_Value")
+                           
+                           B <- ggplot2::ggplot(data = tempDataFrame) +
+                             ggplot2::theme(
+                               plot.title = ggplot2::element_text(
+                                 color = "black",
+                                 size = 14,
+                                 face = "bold",
+                                 hjust = 0.5
+                               ),
+                               axis.title.x = ggplot2::element_text(
+                                 color = "black",
+                                 size = 14,
+                                 face = "bold"
+                               ),
+                               axis.title.y = ggplot2::element_text(
+                                 color = "black",
+                                 size = 14,
+                                 face = "bold"
+                               ),
+                               panel.background = ggplot2::element_rect(fill = "white", colour = "black"),
+                               axis.text.x = ggplot2::element_text(size = 12, face = "bold"),
+                               axis.text.y = ggplot2::element_text(size = 12, face = "bold")
+                             ) +
+                             ggplot2::aes(x = Fitted_Value, y = stdResiduals) +
+                             ggplot2::geom_line(size = 1, colour = "red") +
+                             ggplot2::geom_point(size = 5,
+                                                 fill = NA,
+                                                 shape = 1) +
+                             ggplot2::ggtitle("Scale - Location") +
+                             ggplot2::xlab(paste("Fitted Values", "\n lm(", format(Formula), ")", sep = "")) +
+                             ggplot2::ylab(expression(sqrt(abs(
+                               "Standardized residuals"
+                             ))))
+                           
+                           
+                         }
+                       )
+)
