@@ -61,7 +61,7 @@ linreg <- setRefClass("linreg",
                          # Print function
                          print = function(){
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n", sep = "")
-                           cat(as.vector(dimnames(a$RegressionCoeficients)[[1]]))
+                           cat(as.vector(dimnames(a$RegressionCoeficients)[[1]]), "\n")
                            cat(as.vector(a$RegressionCoeficients))
                          },
                          # Function that returns Fitted Values
