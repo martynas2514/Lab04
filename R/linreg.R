@@ -60,10 +60,9 @@ linreg <- setRefClass("linreg",
                          },
                          # Print function
                          print = function(){
-                           cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n", sep = "")
-                           cat(as.vector(dimnames(RegressionCoeficients)[[1]]), "\n")
-                           cat(as.vector(RegressionCoeficients))
-                         },
+                           cat("Call:\n\n")
+                           cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
+                           write.table(as.data.frame(as.matrix(as.vector(dimnames(RegressionCoeficients)[[1]]), as.vector(RegressionCoeficients))))                         },
                          # Function that returns Fitted Values
                          pred = function(){
                            return(FittedValues)
