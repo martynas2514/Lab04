@@ -67,7 +67,7 @@ linreg <- setRefClass("linreg",
                            cat("Call:\n")
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
                            cat("Coefficients:\n")
-                           cat(table())
+                           cat(table)
                            
                            },
                          # Function that returns Fitted Values
