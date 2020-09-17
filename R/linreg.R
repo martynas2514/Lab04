@@ -61,7 +61,7 @@ linreg <- setRefClass("linreg",
                          # Print function
                          print = function(){
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")", sep = "")
-                           cat(as.vector(dimnames(a$RegressionCoeficients)[[1]]))
+                           cat('\n', as.vector(dimnames(a$RegressionCoeficients)[[1]]))
                          },
                          # Function that returns Fitted Values
                          pred = function(){
@@ -77,7 +77,7 @@ linreg <- setRefClass("linreg",
                          },
                          summary = function(){
                            cat("Intercept ", RegressionCoeficients)
-                           #summaryMatrix <- matrix(c(RegressionCoeficients, Pvalues, TValues), ncol = 3)
+                           summaryMatrix <- matrix(c(RegressionCoeficients, Pvalues, TValues), ncol = 3)
                            #rownames(summaryMatrix) <- names(RegressionCoeficients)
                            
                            #cat(summaryMatrix)
