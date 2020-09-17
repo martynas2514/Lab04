@@ -67,7 +67,7 @@ linreg <- setRefClass("linreg",
                            cat("Call:\n")
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
                            cat("Coefficients:\n")
-                           write.table
+                           write.table(table, quote = FALSE)
                             
                            write.table(as.data.frame(as.matrix(as.vector(dimnames(RegressionCoeficients)[[1]]), as.vector(RegressionCoeficients))))                         },
                          # Function that returns Fitted Values
