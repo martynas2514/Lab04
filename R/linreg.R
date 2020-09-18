@@ -16,6 +16,7 @@
 #' @export linreg
 #'
 
+#Comment all methods with one line "{text}"
 
 linreg <- setRefClass("linreg",
                        # Include fields -----------
@@ -25,7 +26,7 @@ linreg <- setRefClass("linreg",
                                      Residuals = "matrix",
                                      DegreesOfFreedom = "numeric",
                                      ResidualVariance = "matrix",
-                                     VarianceOfTheRegressionCoefficients ="matrix",
+                                     VarianceOfTheRegressionCoefficients ="vector",
                                      TValues = "vector",
                                      DataName = "character",
                                      Pvalues = "vector"),
@@ -39,24 +40,35 @@ linreg <- setRefClass("linreg",
                            X <- model.matrix(Formula, data)
                            y <- data[all.vars(Formula)[1]]
                            y <- unname(data.matrix(y))
+                           
                            # Apply formula to get the regression coefficient matrix
                            RegressionCoeficients <<- solve(t(X) %*% X) %*% t(X) %*% y
+                           
                            # Apply formula to get fitted values
                            FittedValues <<- X %*% RegressionCoeficients
+                           
                            # Apply formula to get Residuals
                            Residuals <<- y - FittedValues
+                           
                            # Apply formula to get the degrees of freedom
-                           DegreesOfFreedom <<- dim(X)[1] - dim(X)[2]
+                           DegreesOfFreedom <<- dim(X)[1] - dim(RegressionCoeficients)[1]
+                           # Number of observations - number of parameters(including intercept)
+                           
                            # Apply formula to get the degrees of freedom the Residual Variance 
                            ResidualVariance <<- (t(Residuals) %*% Residuals) / DegreesOfFreedom
+                           
                            # Apply formula to get the degrees of freedom the Variance of the Regression coefficient 
-                           VarianceOfTheRegressionCoefficients <<- as.vector(ResidualVariance) * (solve(t(X) %*% X))
-                           # TValues calculation by means of "for loop" over the Variance Of The Regression Coefficients diagonal 
-                           TValues <<- vector()
-                           for (i in 1:length(RegressionCoeficients)) {
-                             TValues <<- append(TValues,RegressionCoeficients[i]/sqrt(VarianceOfTheRegressionCoefficients[i,i]))
-                           }
-                           Pvalues <<- 2*pt(abs(TValues),df=DegreesOfFreedom, lower.tail =FALSE)
+                           VarianceOfTheRegressionCoefficients <<- diag(ResidualVariance[1,1] * (solve(t(X) %*% X)))
+                           
+                           # TValues calculation by means of "for loop" over the Variance Of The Regression Coefficients diagonal
+                           
+                           TValues <<- as.vector(RegressionCoeficients)/sqrt(VarianceOfTheRegressionCoefficients)
+                           #for (i in 1:length(RegressionCoeficients)) {
+                            # TValues <<- append(TValues,RegressionCoeficients[i]/sqrt(VarianceOfTheRegressionCoefficients[i,i]))
+                           #}
+                           
+                           #Pvalues <<- 2*pt(abs(TValues),df=DegreesOfFreedom, lower.tail=FALSE)
+                           Pvalues <<- pt(as.vector(RegressionCoeficients),df=DegreesOfFreedom)
                          },
                          # Print function
                          print = function(){
@@ -85,20 +97,33 @@ linreg <- setRefClass("linreg",
                            return(RegressionCoeficients)
                          },
                          summary = function(){
-                           summaryMatrix <- matrix(c(as.vector(RegressionCoeficients), as.vector(Pvalues), as.vector(TValues)), ncol = 3)
-                           colnames(summaryMatrix) <- c("Regression Coefficients", "Pvalues", "TValues")
+                           summaryMatrix <- matrix(round(c(as.vector(RegressionCoeficients), as.vector(sqrt(VarianceOfTheRegressionCoefficients)), as.vector(TValues), as.vector(Pvalues)),4), ncol = 4)
+                           colnames(summaryMatrix) <- c("    Coefficients", "Standard Error" ,"Tvalues", "PValues")
                            rownames(summaryMatrix) <- dimnames(RegressionCoeficients)[[1]]
-                           summaryMatrix
+                           cat("Call:\n")
+                           cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
+                           #write.table((summaryMatrix), quote = FALSE)
+                           cat("           Coefficients", "Standard Error" ,"Tvalues", "PValues", "\n ",sep = " ")
+
+                           for (i in 1:length(rownames(summaryMatrix) )){
+                             cat(rownames(summaryMatrix)[i], " ")
+                             for (j in 1:length(colnames(summaryMatrix))){
+                              cat(as.character(summaryMatrix[i,j], "   "))
+                              cat("  ")
+                             }
+                             cat("\n")
+                             cat(" ")
+                           }
+                         
+                            #cat()
                            #cat(names(obj$RegressionCoeficients),"\n", obj$RegressionCoeficients)
-                           #cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
+                           cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
                            #cat("\n t - values:", obj$tValues)
                            #cat("\n residual variance:", ResidualVariance)
                            #cat("\n degrees of freedom:", DegreesOfFreedom,"\n")
                            
                          },
                          plot = function() {
-                           
-                           
                            
                            tempDataFrame <- data.frame(unlist( Residuals), unlist( FittedValues), c(1:length( Residuals)))
                            names(tempDataFrame) <- c("Residuals", "Fitted_Value", "Index")
