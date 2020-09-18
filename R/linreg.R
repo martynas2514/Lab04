@@ -56,18 +56,20 @@ linreg <- setRefClass("linreg",
                            for (i in 1:length(RegressionCoeficients)) {
                              TValues <<- append(TValues,RegressionCoeficients[i]/sqrt(VarianceOfTheRegressionCoefficients[i,i]))
                            }
-                           Pvalues <<- 2*pt(abs(TValues),df=DegreesOfFreedom, lower=FALSE)
+                           Pvalues <<- 2*pt(abs(TValues),df=DegreesOfFreedom, lower.tail =FALSE)
                          },
                          # Print function
                          print = function(){
-                           df <- as.data.frame(matrix(as.vector(RegressionCoeficients), nrow = 1))
-                           names(df) <- dimnames(RegressionCoeficients)[[1]]
-                           table <- table(names(df))
-                           table[1:length(table)] <- as.vector(RegressionCoeficients)
+                           #df <- as.data.frame(matrix(as.vector(RegressionCoeficients), nrow = 1))
+                           #names(df) <- dimnames(RegressionCoeficients)[[1]]
+                           #table <- table(names(df))
+                           #table[1:length(table)] <- as.vector(RegressionCoeficients)
                            cat("Call:\n")
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
                            cat("Coefficients:\n")
-                           cat(table)
+                           cat(dimnames(RegressionCoeficients)[[1]], "\n")
+                           cat(RegressionCoeficients)
+                           #cat(table)
                            
                            },
                          # Function that returns Fitted Values
@@ -83,12 +85,10 @@ linreg <- setRefClass("linreg",
                            return(RegressionCoeficients)
                          },
                          summary = function(){
-                           cat("Intercept ", RegressionCoeficients)
-                           summaryMatrix <- matrix(c(RegressionCoeficients, Pvalues, TValues), ncol = 3)
-                           #rownames(summaryMatrix) <- names(RegressionCoeficients)
-                           
-                           #cat(summaryMatrix)
-                           #rownames(summaryMatrix) <- c()
+                           summaryMatrix <- matrix(c(as.vector(RegressionCoeficients), as.vector(Pvalues), as.vector(TValues)), ncol = 3)
+                           colnames(summaryMatrix) <- c("Regression Coefficients", "Pvalues", "TValues")
+                           rownames(summaryMatrix) <- dimnames(RegressionCoeficients)[[1]]
+                           summaryMatrix
                            #cat(names(obj$RegressionCoeficients),"\n", obj$RegressionCoeficients)
                            #cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
                            #cat("\n t - values:", obj$tValues)
