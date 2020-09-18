@@ -2,4 +2,6 @@
 
 export(linreg)
 export(theme_liu)
+import(grDevices)
 import(methods)
+importFrom(ggplot2,"%+replace%")

@@ -11,7 +11,7 @@
 #' @field DataName character. 
 #' @field Pvalues vector. 
 #'
-#' @return
+#' @return class
 #' @import methods
 #' @export linreg
 #'

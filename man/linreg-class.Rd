@@ -6,7 +6,7 @@
 \alias{linreg}
 \title{Multiple regression model}
 \value{
-
+class
 }
 \description{
 Multiple regression model
