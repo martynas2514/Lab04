@@ -35,4 +35,21 @@ Multiple regression model
 \item{\code{Pvalues}}{vector.}
 }}
 
+\section{Methods}{
+
+\describe{
+\item{\code{coef()}}{returns coefficients as a named vector}
+
+\item{\code{initialize(formula, data)}}{constructor}
+
+\item{\code{plot()}}{plots residuals vs Fitted values plot and Scale - Location plot}
+
+\item{\code{pred()}}{returns the predicted values}
+
+\item{\code{print()}}{prints formula, name of data frame and regression coeficients}
+
+\item{\code{resid()}}{returns vector of residuals}
+
+\item{\code{summary()}}{returns the summary of linear regression model}
+}}
 
