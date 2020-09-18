@@ -6,9 +6,6 @@
 \usage{
 theme_liu()
 }
-\value{
-
-}
 \description{
 liu theme
 }

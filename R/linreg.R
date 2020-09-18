@@ -12,7 +12,6 @@
 #' @field Pvalues vector. 
 #'
 #' @return
-#' @import methods
 #' @export linreg
 #'
 
