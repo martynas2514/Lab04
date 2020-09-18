@@ -1,8 +1,0 @@
-^.*\.Rproj$
-^\.Rproj\.user$
-<<<<<<< HEAD
-^\.travis.yml$
-^\.git$
-=======
-.travis.yml
->>>>>>> 37c000d525e4921d8121553500f0afb9603015dc
