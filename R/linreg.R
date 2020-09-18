@@ -98,22 +98,24 @@ linreg <- setRefClass("linreg",
                          },
                          summary = function(){
                            summaryMatrix <- matrix(round(c(as.vector(RegressionCoeficients), as.vector(sqrt(VarianceOfTheRegressionCoefficients)), as.vector(TValues), as.vector(Pvalues)),4), ncol = 4)
-                           colnames(summaryMatrix) <- c("    Coefficients", "Standard Error" ,"Tvalues", "PValues")
+                           summaryMatrix <- cbind(summaryMatrix, rep("***",3))
+                           colnames(summaryMatrix) <- c("    Coefficients", "Standard Error" ,"Tvalues", "PValues", "***?")
                            rownames(summaryMatrix) <- dimnames(RegressionCoeficients)[[1]]
                            cat("Call:\n")
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
-                           #write.table((summaryMatrix), quote = FALSE)
-                           cat("           Coefficients", "Standard Error" ,"Tvalues", "PValues", "\n ",sep = " ")
+                           write.table((summaryMatrix), quote = FALSE)
+                           #cat("           Coefficients", "Standard Error" ,"Tvalues", "PValues", "\n ",sep = " ")
 
-                           for (i in 1:length(rownames(summaryMatrix) )){
-                             cat(rownames(summaryMatrix)[i], " ")
-                             for (j in 1:length(colnames(summaryMatrix))){
-                              cat(as.character(summaryMatrix[i,j], "   "))
-                              cat("  ")
-                             }
-                             cat("\n")
-                             cat(" ")
-                           }
+                           # for (i in 1:length(rownames(summaryMatrix) )){
+                           #   cat(rownames(summaryMatrix)[i], " ")
+                           #   for (j in 1:length(colnames(summaryMatrix))){
+                           #    cat(as.character(summaryMatrix[i,j], "   "))
+                           #    cat("  ")
+                           #   }
+                           #   cat("***")
+                           #   cat("\n")
+                           #   cat(" ")
+                           # }
                          
                             #cat()
                            #cat(names(obj$RegressionCoeficients),"\n", obj$RegressionCoeficients)
