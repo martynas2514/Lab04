@@ -34,7 +34,7 @@ linreg <- setRefClass("linreg",
                       # Include methods
                        methods = list(
                          # Initialization of fields 
-                         initialize = function(formula, data) {
+                         initialize = function(formula, data) { "constructor"
                            Formula <<- formula
                            DataName <<- deparse(substitute(data)) #get the name of dataframe
                            X <- model.matrix(Formula, data)
@@ -71,7 +71,7 @@ linreg <- setRefClass("linreg",
                            Pvalues <<- pt(as.vector(RegressionCoeficients),df=DegreesOfFreedom)
                          },
                          # Print function
-                         print = function(){
+                         print = function(){ "prints formula, name of data frame and regression coeficients"
                            #df <- as.data.frame(matrix(as.vector(RegressionCoeficients), nrow = 1))
                            #names(df) <- dimnames(RegressionCoeficients)[[1]]
                            #table <- table(names(df))
@@ -85,18 +85,18 @@ linreg <- setRefClass("linreg",
                            
                            },
                          # Function that returns Fitted Values
-                         pred = function(){
+                         pred = function(){ "returns the predicted values"
                            return(FittedValues)
                          },
                          # Function that returns Residuals
-                         resid = function(){
+                         resid = function(){ "returns vector of residuals"
                            return(as.vector(Residuals))
                          },
                          # Function that returns The Regression Coefficients
-                         coef = function(){
+                         coef = function(){ "returns coefficients as a named vector"
                            return(RegressionCoeficients)
                          },
-                         summary = function(){
+                         summary = function(){ "returns the summary of linear regression model"
                            summaryMatrix <- matrix(round(c(as.vector(RegressionCoeficients), as.vector(sqrt(VarianceOfTheRegressionCoefficients)), as.vector(TValues), as.vector(Pvalues)),4), ncol = 4)
                            summaryMatrix <- cbind(summaryMatrix, rep("***",3))
                            colnames(summaryMatrix) <- c("    Coefficients", "Standard Error" ,"Tvalues", "PValues", "***?")
@@ -125,7 +125,7 @@ linreg <- setRefClass("linreg",
                            #cat("\n degrees of freedom:", DegreesOfFreedom,"\n")
                            
                          },
-                         plot = function() {
+                         plot = function() { "plots residuals vs Fitted values plot and Scale - Location plot"
                            
                            tempDataFrame <- data.frame(unlist( Residuals), unlist( FittedValues), c(1:length( Residuals)))
                            names(tempDataFrame) <- c("Residuals", "Fitted_Value", "Index")
