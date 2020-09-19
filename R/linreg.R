@@ -99,7 +99,7 @@ linreg <- setRefClass("linreg",
                          summary = function(){ "returns the summary of linear regression model"
                            summaryMatrix <- matrix(round(c(as.vector(RegressionCoeficients), as.vector(sqrt(VarianceOfTheRegressionCoefficients)), as.vector(TValues), as.vector(Pvalues)),4), ncol = 4)
                            summaryMatrix <- cbind(summaryMatrix, rep("***",3))
-                           colnames(summaryMatrix) <- c("    Coefficients", "Standard Error" ,"Tvalues", "PValues", "***?")
+                           colnames(summaryMatrix) <- c("    Coefficients", "Standard Error" ,"Tvalues", "PValues", "***")
                            rownames(summaryMatrix) <- dimnames(RegressionCoeficients)[[1]]
                            cat("Call:\n")
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
