@@ -63,25 +63,17 @@ linreg <- setRefClass("linreg",
                            # TValues calculation by means of "for loop" over the Variance Of The Regression Coefficients diagonal
                            
                            TValues <<- as.vector(RegressionCoeficients)/sqrt(VarianceOfTheRegressionCoefficients)
-                           #for (i in 1:length(RegressionCoeficients)) {
-                            # TValues <<- append(TValues,RegressionCoeficients[i]/sqrt(VarianceOfTheRegressionCoefficients[i,i]))
-                           #}
                            
-                           #Pvalues <<- 2*pt(abs(TValues),df=DegreesOfFreedom, lower.tail=FALSE)
                            Pvalues <<- pt(as.vector(RegressionCoeficients),df=DegreesOfFreedom)
                          },
                          # Print function
                          print = function(){ "prints formula, name of data frame and regression coeficients"
-                           #df <- as.data.frame(matrix(as.vector(RegressionCoeficients), nrow = 1))
-                           #names(df) <- dimnames(RegressionCoeficients)[[1]]
-                           #table <- table(names(df))
-                           #table[1:length(table)] <- as.vector(RegressionCoeficients)
+
                            cat("Call:\n")
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
                            cat("Coefficients:\n")
                            cat(dimnames(RegressionCoeficients)[[1]], "\n")
                            cat(RegressionCoeficients)
-                           #cat(table)
                            
                            },
                          # Function that returns Fitted Values
@@ -112,7 +104,7 @@ linreg <- setRefClass("linreg",
                            names(tempDataFrame) <- c("Residuals", "Fitted_Value", "Index")
                            
                            outliers <- tempDataFrame$Residuals > as.numeric(quantile(tempDataFrame$Residuals)[4]) + (IQR(tempDataFrame$Residuals) * 1.82) |
-                             tempDataFrame$Residuals < as.numeric(quantile(tempDataFrame$Residuals)[2]) - (IQR(tempDataFrame$Residuals) * 1.82)
+                           tempDataFrame$Residuals < as.numeric(quantile(tempDataFrame$Residuals)[2]) - (IQR(tempDataFrame$Residuals) * 1.82)
                            
                            
                            A <- ggplot2::ggplot(data = tempDataFrame) +
@@ -162,10 +154,3 @@ linreg <- setRefClass("linreg",
                          }
                        )
 )
-mi_funcion <- function(a,b){
-  c <- a + b
-  return (c)
-}
-
-mi_funcion(3,4)
-
