@@ -162,3 +162,10 @@ linreg <- setRefClass("linreg",
                          }
                        )
 )
+mi_funcion <- function(a,b){
+  c <- a + b
+  return (c)
+}
+
+mi_funcion(3,4)
+
