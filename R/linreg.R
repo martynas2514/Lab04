@@ -89,14 +89,18 @@ linreg <- setRefClass("linreg",
                            return(RegressionCoeficients)
                          },
                          summary = function(){ "returns the summary of linear regression model"
+                           
                            summaryMatrix <- matrix(round(c(as.vector(RegressionCoeficients), as.vector(sqrt(VarianceOfTheRegressionCoefficients)), as.vector(TValues), as.vector(Pvalues)),4), ncol = 4)
-                           summaryMatrix <- cbind(summaryMatrix, rep("***",3))
-                           colnames(summaryMatrix) <- c("    Coefficients", "Standard Error" ,"Tvalues", "PValues", "***")
+                           Pval_thresh <- ifelse(Pvalues<0.001, "***",no = ifelse(Pvalues<0.01, "**", ifelse(Pvalues<0.05, "*", ifelse(Pvalues<0.1, ".", " "))))
+                           summaryMatrix <- cbind(summaryMatrix, Pval_thresh)
+                           
+                           colnames(summaryMatrix) <- c("    Coefficients", "Standard Error" ,"Tvalues", "PValues", " ")
                            rownames(summaryMatrix) <- dimnames(RegressionCoeficients)[[1]]
                            cat("Call:\n")
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
                            write.table((summaryMatrix), quote = FALSE)
                            cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
+                           cat("Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1")
                          },
                          plot = function() { "plots residuals vs Fitted values plot and Scale - Location plot"
                            
