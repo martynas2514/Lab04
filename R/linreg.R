@@ -100,7 +100,7 @@ linreg <- setRefClass("linreg",
                            cat("linreg(formula = ", format(Formula), ", data = ", DataName ,")\n\n", sep = "")
                            write.table((summaryMatrix), quote = FALSE)
                            cat("\n Residual standard error:", sqrt(ResidualVariance),"on", DegreesOfFreedom,"degrees of freedom")
-                           cat("Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1")
+                           cat("Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1")
                          },
                          plot = function() { "plots residuals vs Fitted values plot and Scale - Location plot"
                            
